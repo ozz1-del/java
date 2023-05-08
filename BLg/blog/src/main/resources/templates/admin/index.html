@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <title>管理首页</title>
+</head>
+<body>
+<!--导航-->
+<nav th:replace="admin/_fragments :: menu1(0)"></nav>
+<div th:replace="admin/_fragments :: menu2(0)"></div>
+<!--中间内容-->
+<div class="m-container m-padded-tb-large">
+    <div class="ui container">
+        <div class="ui success large message">
+            <h3>欢迎登陆</h3>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/><br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<!--底部-->
+<footer th:replace="admin/_fragments :: footer"></footer>
+
+
+<!-- 引入Jquery-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+</body>
+<script th:replace="admin/_fragments :: script"></script>
+</html>

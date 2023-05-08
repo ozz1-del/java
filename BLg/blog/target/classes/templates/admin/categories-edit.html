@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <title>分类编辑</title>
+</head>
+
+<body>
+    <!--导航-->
+    <nav th:replace="admin/_fragments :: menu1(2)"></nav>
+    <div th:replace="admin/_fragments :: menu2(1)"></div>
+
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-large">
+        <div class="ui container">
+            <form th:action="@{/admin/categories/editCategory}" method="post" class="ui form">
+              <input type="hidden" name="id" th:value="${category.getId()}">
+                <div class="field">
+                    <div class="ui left labeled input">
+                        <label class="ui teal basic label">分类:</label>
+                        <input type="text" name="name" th:value=${category.getName()}>
+                    </div>
+                </div>
+
+                <div class="ui error message"></div>
+                <div class="ui right aligned container">
+                    <a type="button" class="ui button" th:href="@{/admin/categories}">返回</a>
+
+                    <button type="submit" class="ui teal button">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <!--底部-->
+    <footer th:replace="admin/_fragments :: footer"></footer>
+
+<!-- 引入Jquery-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<!-- 引入js -->
+<script th:replace="_fragments :: script"></script>
+
+<script>
+    $('.ui.form').form({
+        fields:{
+            username:{
+                identifier: 'name',
+                rules:[{
+                    type: 'empty',
+                    prompt: '请输入分类名'
+                }]
+            },
+
+        }
+    })
+
+</script>
+
+</body>
+
+</html>

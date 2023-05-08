@@ -1,0 +1,76 @@
+<!--
+ * @Author: ykk
+ * @Date: 2023-04-26 15:32:55
+ * @LastEditTime: 2023-04-29 22:14:17
+ * @LastEditors:  
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <title>博客管理</title>
+</head>
+<body>
+    <!--导航-->
+    <nav th:replace="admin/_fragments :: menu1(5)"></nav>
+    <div th:replace="admin/_fragments :: menu2(2)"></div>
+
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-large">
+        <div class="ui container">
+            <div class="ui success message" th:unless="${#strings.isEmpty(message)}" >
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${message}"></p>
+            </div>
+            <table class="ui celled teal table" width="100%">
+                <thead>
+                    <tr>
+                        <th width="0.5%">id</th>
+                        <th width="30%">标题</th>
+                        <th width="10%">类型</th>
+                        <th width="6%">草稿</th>
+                        <th width="6%">置顶</th>
+                        <th width="6%">评论</th>
+                        <th width="10%">发布时间</th>
+                        <th width="10%">更新时间</th>
+                        <th width="20%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="draft:${drafts}">
+                        <td th:text="${draft.getId()}"></td>
+                        <td th:text="${draft.getTitle()}"></td>
+                        <td th:text="${draft.getCate().getName()}"></td>
+                        <td th:text="${draft.getStatus()==1?'否':'是'}"></td>
+                        <td th:text="${draft.getIstop()==0?'否':'是'}"></td>
+                        <td th:text="${draft.getIscomment()==0?'否':'是'}"></td>
+                        <td th:text="${#dates.format(draft.getCreatetime(),'yyyy-MM-dd hh:mm:ss')}"></td>
+                        <td th:text="${#dates.format(draft.getUpdatetime(),'yyyy-MM-dd hh:mm:ss')}"></td>
+                        <td>
+                            <a th:href="@{blogs/edit?id=}+${draft.id}" class="ui mini teal button">编辑</a>
+                            <a th:href="@{blogs/deleteDraft?id=}+${draft.id}" class="ui mini red button" onclick="return confirm('确认删除吗？')">删除</a>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <!--底部-->
+    <footer th:replace="admin/_fragments :: footer"></footer>
+
+
+<!-- 引入Jquery-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script th:replace="admin/_fragments :: script"></script>
+
+
+</body>
+</html>

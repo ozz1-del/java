@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="_fragments :: head(~{::title})">
+    <title>分类</title>
+</head>
+<body>
+    <!--导航-->
+    <nav th:replace="_fragments :: menu(2)"></nav>
+
+
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-large">
+        <div class="ui container">
+            <!--头部-->
+            <div class="ui attached segment">
+                <div class="ui two column grid">
+                    <div class="column">
+                        <h3 class="ui teal header">分类</h3>
+                    </div>
+                    <div class="right aligned column">
+                        共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${categoriesTotal}"></h2> 个
+                    </div>
+                </div>
+            </div>
+            <!--分类标签区-->
+            <div class="ui segment attached m-padded-tb-large" >
+                <div class="ui labeled button m-margin-tb-tiny">
+                    <a th:href="@{/categories}" class="ui button" th:classappend="${currentId==0?'teal':''}">全部</a>
+                    <div class="ui label left pointing" th:classappend="${currentId==0?'teal':''}" th:text="${blogsTotal}"></div>
+                </div>
+                <div class="ui labeled button m-margin-tb-tiny" th:each="category:${categories}">
+                    <a th:href="@{/categories?categoryId=}+${category.getId()}" class="ui button" th:classappend="${currentId==category.getId()?'teal':''}" th:text="${category.getName()}"></a>
+                    <div class="ui label left pointing" th:classappend="${currentId==category.getId()?'teal':''}" th:text="${category.getNumber()}"></div>
+                </div>
+
+
+            </div>
+            <!--博客列表-->
+            <div class="ui top teal attached segment ">
+                <div class="ui padded vertical segment m-padded-tb-large m-mobile-lr-clear" th:each="blog:${blogs}">
+                    <div class="ui mobile reversed stackable grid">
+                        <div class="ui eleven wide column">
+                            <h3 class="ui header" th:text="${blog.getTitle}"></h3>
+                            <p class="m-text" th:text="${blog.getSummary()}"></p>
+                            <div class="ui grid">
+                                <div class="eleven wide column">
+                                    <div class="ui horizontal link list">
+                                        <div class="item">
+                                            <a href="#" class="header" th:text="${blog.getUsername()}"></a>
+                                        </div>
+                                        <div class="item">
+                                            <label><i class="calendar icon"></i><label  th:text="${#dates.format(blog.getUpdatetime(),'yyyy-MM-dd hh:mm:ss')}"></label></label>
+                                        </div>
+                                        <div class="item">
+                                            <label><i class="eye icon"></i><label th:text="${blog.getViews()}"></label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right aligned five wide column">
+                                    <a th:href="@{/blog?id=}+${blog.getId()}" target="_blank" style="font-size: 14px;" class="ui teal basic label m-padded-mini m-text-thin">阅读></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui five wide column">
+                            <a th:href="@{/blog?id=}+${blog.getId()}" target="_blank">
+                                <img th:src="${blog.getPictureurl()}" class="ui rounded image">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <!--分页-->
+            <div class="ui bottom attached segment">
+                <div class="ui two column grid">
+                    <div class="column">
+                        <a th:href="@{/categories?pageNum=}+${pageNum>1?pageNum-1:1}+'&categoryId='+${currentId}" class="ui teal basic button">上一页</a>
+                    </div>
+                    <div class="right aligned column">
+                        <a th:href="@{/categories?pageNum=}+${(pageNum*pageSize)>blogsTotal?pageNum:pageNum+1}+'&categoryId='+${currentId}" class="ui teal basic button">下一页</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!--底部-->
+    <footer th:replace="_fragments :: footer"></footer>
+
+
+<!-- 引入Jquery-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+</body>
+<script th:replace="_fragments :: script"></script>
+
+</html>

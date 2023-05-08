@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>blog</title>
+<!--    引入semantic ui-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" th:href="@{/css/mcss.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/typo.css}" type="text/css"/>
+
+</head>
+<body>
+    <!--导航-->
+    <nav th:replace="_fragments :: menu(0)"></nav>
+
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-large">
+        <div class="ui container">
+            <!--头部-->
+            <div class="ui attached segment">
+                <div class="ui horizontal link list">
+                    <div class="item">
+                        <label>
+                            <a href="#" class="header" th:text="${blog.getUsername()}"></a>
+                        </label>
+                    </div>
+                    <div class="item" >
+                        <label><i class="time icon"></i><label class="content" th:text="${#dates.format(blog.getUpdatetime(),'yyyy-MM-dd hh:mm:ss')}"></label></label>
+                    </div>
+                    <div class="item">
+                        <label><i class="eye icon"></i><label class="content" th:text="${blog.getViews()}"></label></label>
+                    </div>
+                    <div class="item">
+                      <label>分类：<label class="content" th:text="${blog.getCate().getName()}"></label></label>
+                  </div>
+                </div>
+            </div>
+            <!--图片区-->
+            <div class="ui attached segment">
+                <img th:src="${blog.getPictureurl()}" alt="" style="height: 400px;" class="ui fluid rounded image">
+            </div>
+            <!--内容-->
+            <div class="ui attached padded segment">
+                <div class="ui right aligned segment">
+                    <div class="ui orange basic label" th:text="${blog.getPropertyname()}"></div>
+                </div>
+                    <h2 class="ui center aligned header" th:text="${blog.getTitle()}"></h2>
+
+                    <div id="content" class="typo m-padded-lr-responsive m-padded-tb-large" th:utext="${blog.getContent()}">
+
+                    </div>
+                <!--标签-->
+                <div class="m-padded-lr-responsive">
+                    <div class="ui basic teal left pointing label" th:each="tag:${blog.getTa()}" th:text="${tag.getName()}"></div>
+                </div>
+            </div>
+
+            <!--博客信息-->
+            <div class="ui attached positive message">
+                <div class="ui padded middle aligned grid">
+                    <div class="eleven wide column">
+                        <ul class="list">
+                            <li>作者：<label th:text="${blog.getUsername()}"></label></li>
+                            <li>发表时间：<label th:text="${#dates.format(blog.getCreatetime(),'yyyy-MM-dd HH:mm:ss')}"></label></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--留言区-->
+            <div class="ui attached segment"  th:styleappend="${(blog.getIscomment()==1)?'display:':'display:none'}">
+                <!--留言区列表-->
+                <div id="comment-container" class="ui teal segment">
+                    <div id="commentList" th:fragment="commentList">
+                        <div class="ui threaded comments" style="max-width: 100%">
+                            <h3 class="ui dividing header">评论</h3>
+                            <div class="comment" th:each="comment:${comments}">
+                                <a class="avatar">
+                                    <img th:src="${comment.getAvatar()}">
+                                </a>
+                                <div class="content">
+                                    <a class="author" >
+                                        <span th:text="${comment.getName()}"></span>
+                                        <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${comment.getIsadmin()==1}">博主</div>
+                                    </a>
+                                    <div class="metadata">
+                                        <span class="date" th:text="${#dates.format(comment.getDate(),'yyyy-MM-dd HH:mm:ss')}"></span>
+                                    </div>
+                                    <div class="text" th:text="${comment.getContent()}">
+
+                                    </div>
+                                    <div class="actions">
+                                        <a class="reply" th:data-commentid="${comment.getId()}" th:data-commentnickname="${comment.getName()}" onclick="reply(this);">回复</a>
+                                    </div>
+                                </div>
+                                <!--子级-->
+                                <div class="comments" th:if="${#arrays.length(comment.getReplyComments())>0}">
+                                    <div class="comment" th:each="reply:${comment.getReplyComments()}">
+                                        <a class="avatar">
+                                            <img th:src="${reply.getAvatar()}">
+                                        </a>
+                                        <div class="content">
+                                            <a class="author">
+                                                <span th:text="${reply.getName()}"></span>
+                                                <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${reply.getIsadmin()==1}">博主</div>
+                                                <a style="font-weight: bold;text-decoration: teal;" th:text="'@'+${reply.getParentComment().getName()}"></a>
+
+
+                                            </a>
+                                            <div class="metadata">
+                                                <span class="date" th:text="${#dates.format(reply.getDate(),'yyyy-MM-dd HH:mm:ss')}"></span>
+                                            </div>
+                                            <div class="text" th:text="${reply.getContent()}">
+
+                                            </div>
+                                            <div class="actions">
+                                                <a class="reply" th:data-commentid="${reply.getId()}" th:data-commentnickname="${reply.getName()}" onclick="reply(this);">回复</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!--留言区-->
+                <div id="comment-form" class="ui form">
+                    <input style="display: none;" class="text" name="blog" th:value="${blog.getId()}"></input>
+                    <input style="display: none;" class="text" name="parent" value="-1"></input>
+                    <div class="field">
+                        <textarea name="content" placeholder="请输评论内容..."></textarea>
+                    </div>
+                    <div class="fields">
+                        <div class="field m-mobile-wide m-margin-bottom-small">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="nickname" placeholder="请输入昵称" th:value="${session.user}!=null ? ${session.user.getName()}">
+                            </div>
+                        </div>
+                        <div class="field m-mobile-wide m-margin-bottom-small">
+                            <div class="ui left icon input">
+                                <i class="mail icon"></i>
+                                <input type="text" name="email" placeholder="请输入邮箱" th:value="${session.user}!=null?${session.user.getEmail()}">
+                            </div>
+                        </div>
+                        <div class="field m-mobile-wide">
+                            <button id="commentPost-btn" type="button" class="ui teal button m-mobile-wide"><i class="edit icon"></i>发布</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--底部-->
+<footer th:replace="_fragments :: footer"></footer>
+
+<!-- 引入Jquery-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script th:replace="_fragments :: script"></script>
+
+
+
+<script>
+    $('.ui.form').form({
+        fields: {
+            content: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输评论内容'
+                }]
+            },
+            nickname: {
+                identifier: 'nickname',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入昵称'
+                }]
+            },
+            email: {
+                identifier: 'email',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入邮箱'
+                }]
+            }
+
+        }
+    });
+    $('#commentPost-btn').click(function(){
+        var boo = $('.ui.form').form('validate form');
+        if (boo){
+            postData()
+        }else {
+            alert("验证不通过")
+        }
+    });
+    function clearContent(){
+        $("[name='content']").val('')
+        $("[name='content']").attr("placeholder","请输入评论...")
+        $("[name='parent']").val(-1)
+
+    }
+    function reply(obj){
+        var commentId=$(obj).data('commentid')
+        var commentNickName = $(obj).data('commentnickname');
+        $("[name='content']").attr("placeholder","@"+commentNickName).focus()
+        $("[name='parent']").val(commentId)
+        $(window).scrollTo($('#comment-form'),500)
+    }
+
+    function postData(){
+        $.ajax({
+            url:"comments",
+            type:"POST",
+            data:{
+                "parent":$("[name='parent']").val(),
+                "blog":$("[name='blog']").val(),
+                "name":$("[name='nickname']").val(),
+                "email":$("[name='email']").val(),
+                "content":$("[name='content']").val()
+            },
+            success:function(data){
+                clearContent()
+                $('#commentList').html(data)
+            },
+        })
+    }
+
+
+
+
+
+
+</script>
+
+</body>
+
+
+</html>

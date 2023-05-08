@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title th:replace="${title}">blog</title>
+    <!--    引入semantic ui-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" th:href="@{/css/mcss.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/typo.css}" type="text/css"/>
+
+</head>
+<body>
+<!--导航-->
+<nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui header item"><a th:href="@{/admin/index}" style="text-decoration: none;color: #17fff7">Blog</a></h2>
+            <a th:href="@{/}" class="m-item m-mobile-hide item" th:classappend="${n==1} ? 'active'"><i class="home icon"></i>博客列表</a>
+            <a th:href="@{/categories}" class="m-item m-mobile-hide item" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>分类</a>
+            <a th:href="@{/archives}" class="m-item m-mobile-hide item" th:classappend="${n==3} ? 'active'"><i class="time icon"></i>归档</a>
+            <a th:href="@{/aboutme}" class="m-item m-mobile-hide item" th:classappend="${n==4} ? 'active'"><i class="info icon"></i>关于</a>
+            <div class="right item m-mobile-hide">
+                <form class="ui icon inverted transparent input" id="searchform" target="_blank" th:action="@{/}" method="get">
+                    <input type="text" id="title" placeholder="Search..." name="title">
+                    <a onclick="document:searchform.submit()"><i class="search link icon"></i></a>
+                </form>
+            </div>
+            <div class="right m-item m-mobile-hide menu" th:styleappend="${(session.user==null)?'display:none':'display:'}">
+                <div class="ui dropdown item">
+                    <a class="text" th:text="(${(session.user==null)?'请登录':(session.user.getName())})">
+                    </a>
+
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon "></i>
+    </a>
+</nav>
+<footer th:fragment="footer" class="ui inverted attached segment m-padded-tb-big">
+    <div class="ui center aligned container">
+        <div class="ui inverted stackable divided grid">
+            <div class="four wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img th:src="@{/image/wechat.jpg}" class="ui rounded image" style="width: 110px" alt="">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="four wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced m-opacity-mini">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Email: ozz1@foxmail.com</a>
+                    <a href="#" class="item">Tel: 17600589320</a>
+                </div>
+            </div>
+            <div class="eight wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced m-opacity-mini">关于</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">JAVA springboot进行后端设计，使用semantic ui设计前端，使用mysql设计数据库，实现个人博客的发布和管理等基本功能。</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-mini">Copyright</p>
+    </div>
+</footer>
+<script th:fragment="script">
+    $('.menu.toggle').click(function (){
+        $('.m-item').toggleClass('m-mobile-hide')
+    });
+    $(".ui.dropdown").dropdown({
+        on:'hover' ,//鼠标悬浮显示，默认值是click
+        allowAdditions:true //允许添加新的菜单项
+    });
+    
+</script>
+</body>
+</html>

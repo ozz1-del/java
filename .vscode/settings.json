@@ -1,0 +1,9 @@
+{
+  "java.compile.nullAnalysis.mode": "disabled",
+  "java.configuration.runtimes": [
+
+  
+  ],
+  "java.jdt.ls.java.home": "",
+  "java.import.gradle.java.home": ""
+}

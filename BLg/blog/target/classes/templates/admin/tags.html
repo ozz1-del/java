@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <title>标签管理</title>
+</head>
+<body>
+    <!--导航-->
+    <nav th:replace="admin/_fragments :: menu1(3)"></nav>
+    <div th:replace="admin/_fragments :: menu2(2)"></div>
+
+    <!--中间内容-->
+    <div class="m-container m-padded-tb-large">
+        <div class="ui container">
+            <div class="ui success message" th:unless="${#strings.isEmpty(message)}" >
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${message}"></p>
+            </div>
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>标签名</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="tag:${tags}">
+                        <td th:text="${tag.getId()}"></td>
+                        <td th:text="${tag.getName()}"></td>
+                        <td th:text="${#dates.format(tag.getDate(),'yyyy-MM-dd')}"}></td>
+                        <td>
+                            <a th:href="@{tags/edit?id=}+${tag.getId()}" class="ui mini teal button">编辑</a>
+                            <a th:href="@{tags/deleteTag?id=}+${tag.getId()}" class="ui mini red button" onclick="return confirm('确认删除吗？')">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="5">
+                        <div class="ui pagination menu">
+                            <a class="item" th:href="@{tags?pageNum=}+${pageNum>1?pageNum-1:1}">上一页</a>
+                            <a class="item" th:href="@{tags?pageNum=}+${(pageNum*10)>pageTotal?(pageNum):(pageNum+1)}">下一页</a>
+                        </div>
+                        <a th:href="@{tags/add}" class="ui small right floated teal button">新增</a>
+                    </th>
+                </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <!--底部-->
+    <footer th:replace="admin/_fragments :: footer"></footer>
+
+<!-- 引入Jquery-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!-- 引入组件库 -->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+</body>
+<script th:replace="admin/_fragments :: script"></script>
+<script>
+    $('.message .close').on('click',function(){
+        $(this).closest('.message')
+        .transition('fade')
+    });
+
+</script>
+</html>
